@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Nunito', sans-serif;
+    font-weight: bold;
+}
+
+body{
+    background-image: url(../imgs/ac.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+main .container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #f1f1f1;
+}
+
+main .container .progress-bar {
+    position: relative;
+    width: 500px;
+    height: 20px;
+    border-radius: 30px;
+    background-color: white;
+    box-shadow: 3px 4px 5px 0px rgba(204 185 185 / .75);
+}
+
+main .container .progress-bar span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    color: white;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 1;
+    text-align: center;
+    border-radius: 30px;
+    background: linear-gradient(90deg, rgba(76, 175, 80, 1) 50%, rgba(50, 222, 132, 1) 100%);
+    transition: width .5s linear;
+}
+
+main .container2{
+    width: 80%;
+    height: 80%;
+    background-color: #f1f1f1;
+    border-radius: 25px;
+    padding: 90px;
+    position: relative;
+    overflow: hidden;
+}
+main .container2 .container3{
+    display: flex;
+    gap: 19rem;
+}
+main .container2 .container3 .container4{
+    width: 100%;
+    /* padding-right: 7rem;  */
+}
+main .container2 .container3 .question{
+    width: 800px;
+    text-align: center;
+}
+main .container2 .container3 form{
+    display: grid;
+    grid-template-columns:  repeat(2, 1fr);
+   gap: 2rem;
+}
+main .container2 .container3 .answerdiv{
+    background-color: aquamarine;
+    width: 300px;
+    padding: 30px 40px;
+
+}
+
+
+
+/* [id^="subcont"] {
+    left: 400px; ;
+  } */
+
+main .container2 .nextbtn{
+    text-align: end;
+}
+
+footer{
+    display: flex;
+    flex-direction: column;
+    justify-content:baseline;
+    align-items: center;
+}

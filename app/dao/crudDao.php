@@ -1,9 +1,9 @@
 <?php
-require_once('./app/config/conexion.php');
+require_once('../config/conexion.php');
 
 class CrudDao
 {
-  private $db;
+  protected $db;
   protected $tablename;
   protected $All = ['*'];
 
@@ -13,10 +13,15 @@ class CrudDao
   }
   protected function getAll()
   {
-    $request = $this->db->prepare("SELECT " . implode(', ', $this->All) . " FROM {$this->tablename} ");
+    $request = $this->db->prepare("SELECT " . implode(', ', $this->All) . " FROM {$this->tablename}");
     $request->execute();
-    // ORDER BY RAND() LIMIT 1
     return $request->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  protected function getRandom()
+  {
+    $request = $this->db->prepare("SELECT " . implode(', ', $this->All) . " FROM {$this->tablename} ORDER BY RAND() ");
+    $request->execute();
+    return $request->fetchAll(PDO::FETCH_ASSOC);
+  }
 }

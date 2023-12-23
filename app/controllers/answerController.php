@@ -1,5 +1,5 @@
 <?php 
- require_once('./app/dao/answerDao.php');
+ require_once('../dao/answerDao.php');
 
  class AnswerController{
   private $answerDao;
@@ -11,6 +11,10 @@
   public function getAnswers(){
     return $this->answerDao->getAllAnswers();
   }
+
+  public function getAnswersOfQuestion($questionId){
+    return $this->answerDao->getAnswersOfQuestion($questionId);
+  }
  }
 
-?>
+?> 
