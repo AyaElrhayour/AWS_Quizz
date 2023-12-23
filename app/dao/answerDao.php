@@ -9,7 +9,7 @@ class AnswerDao extends CrudDao {
         parent::__construct();
         $this->tablename = 'answer';
     }
-    public function getAnswers(){
+    public function getAllAnswers(){
       return $this->getAll();
     }
 
