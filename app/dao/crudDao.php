@@ -20,7 +20,7 @@ class CrudDao
 
   protected function getRandom()
   {
-    $request = $this->db->prepare("SELECT " . implode(', ', $this->All) . " FROM {$this->tablename} ORDER BY RAND() ");
+    $request = $this->db->prepare("SELECT " . implode(', ', $this->All) . " FROM {$this->tablename} ORDER BY RAND() LIMIT 3 ");
     $request->execute();
     return $request->fetchAll(PDO::FETCH_ASSOC);
   }

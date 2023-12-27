@@ -27,9 +27,9 @@ $answerController = new AnswerController();
         <?php foreach ($randomQuestion as $rq) { ?>
           <div class="container4">
             <h2 class="question" data-qid="<?php echo $rq["id"]; ?>"><?php echo $rq["question"]; ?></h2>
-            <div class="timer-container">
+            <!-- <div class="timer-container">
               Time left: <span id="timer"></span> seconds
-            </div>
+            </div> -->
             <form>
               <?php
               foreach ($answerController->getAnswersOfQuestion($rq["id"]) as $answer) { ?>
@@ -43,12 +43,15 @@ $answerController = new AnswerController();
             </form>
           </div>
         <?php } ?>
+        <div class="scorediv">
+          <h1 class="result">SCORE</h1>
+        </div>
       </div>
       <div class="nextbtn">
         <button type="button" onclick="nextQuestion()">Next</button>
       </div>
       <input type="hidden" id="selectedAnswer" name="selectedAnswer" value="">
-      <input type="hidden" id="score" name="score" value="0">
+      <input type="hidden" id="score" name="score">
     </div>
   </main>
   <footer>
@@ -61,6 +64,8 @@ $answerController = new AnswerController();
 
   <script src="../../assets/js/quizz.js"></script>
   <script>
+    const scorediv = document.querySelector('.scorediv');
+    const result = document.querySelector('.result');
     let translateValue = 1093;
     var selectedAnswersArray = [];
     var score = 0;
@@ -69,8 +74,10 @@ $answerController = new AnswerController();
     var timer;
     var currentQuestionIndex = 1;
     var seconds = 10;
+    const btn = document.querySelector('.nextbtn button');
 
     function nextQuestion() {
+      checkEndOfQuiz()
       var selectedAnswer = document.querySelector('input[name="answer"]:checked');
 
       if (selectedAnswer) {
@@ -102,19 +109,20 @@ $answerController = new AnswerController();
 
         console.log("Displayed Questions: ", displayedQuestions);
 
-        var matchedQuestion = displayedQuestions.find(question => question.id == qid);
-
-        if (matchedQuestion) {
-          matchedQuestionsArray.push(matchedQuestion);
-          console.log("Matched Questions: ", matchedQuestionsArray);
+        if (istrue == 0) {
+          var matchedQuestion = displayedQuestions.find(question => question.id == qid);
+          if (matchedQuestion) {
+            matchedQuestionsArray.push(matchedQuestion);
+            console.log("Matched Questions: ", matchedQuestionsArray);
+          }
         }
 
         currentQuestionIndex++;
 
         if (currentQuestionIndex < displayedQuestions.length) {
-          document.querySelector('.nextbtn button').innerText = "Next";
+          btn.innerText = "Next";
         } else {
-          document.querySelector('.nextbtn button').innerText = "Finish";
+          btn.innerText = "Finish";
         }
 
         performTransition();
@@ -124,7 +132,6 @@ $answerController = new AnswerController();
     }
 
     function performTransition() {
-      document.getElementById('timer').innerText = seconds;
       const containers = document.querySelectorAll(".container3");
 
       containers.forEach((container) => {
@@ -133,6 +140,36 @@ $answerController = new AnswerController();
       });
 
       translateValue += 1093 + (1093 / 100) * 1;
+    }
+
+    function checkEndOfQuiz() {
+      if (btn.innerText == "Finish") {
+        btn.addEventListener('click', function() {
+          console.log("Button clicked, hiding...");
+          btn.style.display = "none";
+          scorediv.style.display = "block";
+          result.innerText = "Your score is: " + score;
+          displayMatchedQuestions();
+        });
+      }
+    }
+
+    function displayMatchedQuestions() {
+      var scoreText = "<h2>Incorrectly Answered Questions:</h2>";
+
+      if (matchedQuestionsArray.length > 0) {
+        matchedQuestionsArray.forEach(function(question) {
+          var questionText = question.hasOwnProperty("question") ? question.question : question.title;
+          var explanationText = question.hasOwnProperty("explanation") ? question.explanation : question.description;
+
+          scoreText += "<p>" + questionText + "</p>";
+          scoreText += "<p>Explanation: " + explanationText + "</p>";
+        });
+      } else {
+        scoreText += "<p>Congratulations! You answered all questions correctly.</p>";
+      }
+
+      result.innerHTML = scoreText;
     }
   </script>
 
