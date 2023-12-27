@@ -18,6 +18,8 @@ class QuestionDao extends CrudDao
 
   public function getRandomQuestion()
   {
-    return $this->getRandom();
+    $request = $this->db->prepare("SELECT " . implode(', ', $this->All) . " FROM {$this->tablename} ORDER BY RAND() LIMIT 10 ");
+    $request->execute();
+    return $request->fetchAll(PDO::FETCH_ASSOC);
   }
 }

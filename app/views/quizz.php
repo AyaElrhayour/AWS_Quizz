@@ -21,7 +21,29 @@ $answerController = new AnswerController();
 
 <body>
   <main>
-    <h1>Questions</h1>
+    <div class="container1">
+      <div class="progress">
+        <div class="percent"></div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <ul id="progress-bar" class="progressbar">
+              <li class="active"></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="container2">
       <div class="container3">
         <?php foreach ($randomQuestion as $rq) { ?>
@@ -34,7 +56,7 @@ $answerController = new AnswerController();
               <?php
               foreach ($answerController->getAnswersOfQuestion($rq["id"]) as $answer) { ?>
                 <div class="answerdiv ">
-                  <input type="radio" id="answer" name="answer" value="<?php echo $answer["answer"]; ?>" data-istrue="<?php echo $answer["istrue"]; ?>" data-qid="<?php echo $answer["q_id"]; ?>">
+                  <input type="radio" class="answer" name="answer" value="<?php echo $answer["answer"]; ?>" data-istrue="<?php echo $answer["istrue"]; ?>" data-qid="<?php echo $answer["q_id"]; ?>">
                   <label class="answer" for="answer">
                     <?php echo $answer["answer"]; ?>
                   </label>
@@ -43,29 +65,26 @@ $answerController = new AnswerController();
             </form>
           </div>
         <?php } ?>
-        <div class="scorediv">
-          <h1 class="result">SCORE</h1>
-        </div>
+
+      </div>
+      <div class="scorediv">
+        <h3 class="final"></h3>
+        <h1 class="result">SCORE</h1>
       </div>
       <div class="nextbtn">
-        <button type="button" onclick="nextQuestion()">Next</button>
+        <button type="button">Next <span>Next</span></button>
       </div>
       <input type="hidden" id="selectedAnswer" name="selectedAnswer" value="">
       <input type="hidden" id="score" name="score">
     </div>
   </main>
-  <footer>
-    <div>
-      <p>
-        All copyrights reserved to Aya Elrhayour - Code X
-      </p>
-    </div>
-  </footer>
+
 
   <script src="../../assets/js/quizz.js"></script>
   <script>
     const scorediv = document.querySelector('.scorediv');
     const result = document.querySelector('.result');
+    const final = document.querySelector('.final');
     let translateValue = 1093;
     var selectedAnswersArray = [];
     var score = 0;
@@ -76,14 +95,42 @@ $answerController = new AnswerController();
     var seconds = 10;
     const btn = document.querySelector('.nextbtn button');
 
+    const progressBar = {
+      Bar: document.getElementById('progress-bar'),
+      Next: function() {
+        const currentActive = document.querySelector('#progress-bar li.active');
+        const nextElement = currentActive.nextElementSibling;
+        console.log("current active element " + currentActive);
+        console.log("next element " + nextElement);
+
+        if (nextElement && nextElement.tagName === "LI") {
+          console.log("next element is here");
+          nextElement.classList.add('active');
+          currentActive.classList.remove('active');
+        }
+      }
+    };
+    btn.addEventListener("click", () => {
+      console.log("current question index" + currentQuestionIndex);
+      if (currentQuestionIndex <= displayedQuestions.length) {
+        // progressBar.Next();
+        nextQuestion();
+      }
+      console.log("Current Index:", currentQuestionIndex);
+
+    });
+
+
+
+
     function nextQuestion() {
       checkEndOfQuiz()
       var selectedAnswer = document.querySelector('input[name="answer"]:checked');
 
       if (selectedAnswer) {
+        progressBar.Next();
         var istrue = selectedAnswer.getAttribute('data-istrue');
         var qid = selectedAnswer.getAttribute('data-qid');
-        console.log("question id " + qid);
         var selectedAnswerObject = {
           value: selectedAnswer.value,
           istrue: istrue,
@@ -107,13 +154,11 @@ $answerController = new AnswerController();
           radioButton.checked = false;
         });
 
-        console.log("Displayed Questions: ", displayedQuestions);
-
         if (istrue == 0) {
           var matchedQuestion = displayedQuestions.find(question => question.id == qid);
           if (matchedQuestion) {
             matchedQuestionsArray.push(matchedQuestion);
-            console.log("Matched Questions: ", matchedQuestionsArray);
+            // console.log("Matched Questions: ", matchedQuestionsArray);
           }
         }
 
@@ -121,6 +166,8 @@ $answerController = new AnswerController();
 
         if (currentQuestionIndex < displayedQuestions.length) {
           btn.innerText = "Next";
+          // progressBar.Next();
+
         } else {
           btn.innerText = "Finish";
         }
@@ -146,9 +193,11 @@ $answerController = new AnswerController();
       if (btn.innerText == "Finish") {
         btn.addEventListener('click', function() {
           console.log("Button clicked, hiding...");
+          console.log("result " + result);
           btn.style.display = "none";
           scorediv.style.display = "block";
           result.innerText = "Your score is: " + score;
+          final.innerText = "Your score is: " + score
           displayMatchedQuestions();
         });
       }

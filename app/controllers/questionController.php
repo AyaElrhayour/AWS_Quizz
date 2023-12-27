@@ -20,7 +20,3 @@ class QuestionController
     return $this->questionDao->getRandomQuestion();
   }
 }
-// $questionController = new QuestionController();
-// $randomQuestion = $questionController->getRandomQ();
-// echo "<pre>";
-// var_dump( $randomQuestion);
